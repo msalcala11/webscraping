@@ -5,7 +5,7 @@ var csv = require("csv");
 var async = require("async");
 
 var typeArr = [
-	{name: 'Energy Star Bathroom Exhaust Fans', start: 1, stop: 1},
+	{name: 'Residential Whole House Fans', start: 1, stop: 1},
 ];
 
 var startTime = new Date();
@@ -19,53 +19,49 @@ var priceArr = [];
 var bulbArr = [];
 
 // First lets grab our list of energy star appliances we scraped so we can make sure none of them end up in this batch
-var fs = require('fs');
-//var csv = require('csv');
 
-// opts is optional
-//var opts = ;
+// Clothes Washers
+//http://www.homedepot.com/b/Appliances-Washers-Dryers-Washers/ENERGY-STAR-Certified/N-5yc1vZ1z0tlzwZc3ov/Ntk-All/Ntt-clothes%2Bwasher?Ns=P_REP_PRC_MODE%7C0&NCNI-5
+//http://www.homedepot.com/b/Appliances-Washers-Dryers-Washers/N-5yc1vZc3ov/Ntk-All/Ntt-clothes%2Bwasher?Ntx=mode%2Bmatchall&NCNI-5&Ns=P_REP_PRC_MODE%7C0
 
+// Dishwashers
+//http://www.homedepot.com/b/Appliances-Dishwashers/ENERGY-STAR-Certified/N-5yc1vZc3poZ1z0tlzw/Ntk-All/Ntt-clothes%2Bwasher?Ntx=mode%20matchall&NCNI-5&Ns=P_REP_PRC_MODE%7C0
+//http://www.homedepot.com/b/Appliances-Dishwashers/N-5yc1vZc3po/Ntk-All/Ntt-clothes%2Bwasher?Ntx=mode%20matchall&NCNI-5&Ns=P_REP_PRC_MODE%7C0
+
+// Dehumidifiers
+//http://www.homedepot.com/b/Heating-Venting-Cooling-Air-Quality-Dehumidifiers/ENERGY-STAR-Certified/N-5yc1vZc4l8Z1z0tlzw?Ns=P_REP_PRC_MODE%7C0
+//http://www.homedepot.com/b/Heating-Venting-Cooling-Air-Quality-Dehumidifiers/N-5yc1vZc4l8?Ns=P_REP_PRC_MODE%7C0
+
+// Room Air Conditioners
+//http://www.homedepot.com/b/Heating-Venting-Cooling-Air-Conditioners-Coolers-Air-Conditioners-Window-Air-Conditioners/ENERGY-STAR-Certified/N-5yc1vZc4luZ1z0tlzw?Ns=P_REP_PRC_MODE%7C0
+//http://www.homedepot.com/b/Heating-Venting-Cooling-Air-Conditioners-Coolers-Air-Conditioners-Window-Air-Conditioners/N-5yc1vZc4lu?Ns=P_REP_PRC_MODE%7C0
+
+
+var efficientCSVString="";
+
+// var efficientFilename = "homedepotBathroomExhuastFanseEnergyStar.csv";
 // csv()
-// .from.path(__dirname+'/sample.in', { delimiter: ',', escape: '"' })
-// .to.stream(fs.createWriteStream(__dirname+'/sample.out'))
-// .transform( function(row){
-//   row.unshift(row.pop());
-//   return row;
-// })
-// .on('record', function(row,index){
-//   console.log('#'+index+' '+JSON.stringify(row));
-// })
-// .on('close', function(count){
-//   // when writing to a file, use the 'close' event
-//   // the 'end' event may fire before the file has been written
-//   console.log('Number of lines: '+count);
-// })
-// .on('error', function(error){
-//   console.log(error.message);
-// });
-var efficientCSVString;
+// 	.from('./' + efficientFilename)
+// 	.to.string(function(data){
+// 		efficientCSVString = data;
+// 		//console.log(efficientCSVString)
+// 	})
+// 	.on('end', function() {
+//     	console.log('Loaded ' + efficientFilename);
+//     	getAll();
+//     	//console.log("Finished in " + (new Date().getTime()-startTime.getTime())/1000 + " sec")
+//  })
 
-var efficientFilename = "homedepotBathroomExhuastFanseEnergyStar.csv";
-csv()
-	.from('./' + efficientFilename)
-	.to.string(function(data){
-		efficientCSVString = data;
-		//console.log(efficientCSVString)
-	})
-	.on('end', function() {
-    	console.log('Loaded ' + efficientFilename);
-    	getAll();
-    	//console.log("Finished in " + (new Date().getTime()-startTime.getTime())/1000 + " sec")
-  	})
+getAll();
 
 function getAll(){
 	async.eachSeries(typeArr, function(typeItem, bigCallback){
 		currentWattageArr = generateWattageArr(typeItem.start, typeItem.stop);
 		
 		async.eachSeries(currentWattageArr, function(currentWattage, callback) {
-			console.log("Scraping Bathroom Exhaust Fans")
+			console.log("Scraping Whole House Fans")
 
-			page = "http://www.homedepot.com/b/Fan-Only/N-5yc1vZ1z0yi0z/Ntk-All/Ntt-bathroom%2Bexhaust%2Bfan?Ntx=mode%20matchall&NCNI-5&Ns=P_REP_PRC_MODE%7C0";
+			page = "http://www.homedepot.com/b/Heating-Venting-Cooling-Ventilation-Whole-House-Fans/N-25ecodZ25ecodZ5yc1vZc4kk/Ntk-Extended/Ntt-whole%2Bhouse%2Bfan?Ntx=mode+matchpartialmax&NCNI-5";
 
 		    scrapeCurrentWattage(currentWattage, typeItem.name, callback);
 		
@@ -75,7 +71,7 @@ function getAll(){
 		});
 		
 	}, function(err){
-		var filename = "homedepotBathroomExhuastFanseBaseline.csv";
+		var filename = "homedepotHoleHouseFans.csv";
 	  	csv()
 		.from(csvString)
 		.to('./' + filename)
