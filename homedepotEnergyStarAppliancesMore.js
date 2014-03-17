@@ -36,6 +36,13 @@ var baseDH = "http://www.homedepot.com/b/Heating-Venting-Cooling-Air-Quality-Deh
 var esRAC = "http://www.homedepot.com/b/Heating-Venting-Cooling-Air-Conditioners-Coolers-Air-Conditioners-Window-Air-Conditioners/ENERGY-STAR-Certified/N-5yc1vZc4luZ1z0tlzw?Ns=P_REP_PRC_MODE%7C0"
 var baseRAC = "http://www.homedepot.com/b/Heating-Venting-Cooling-Air-Conditioners-Coolers-Air-Conditioners-Window-Air-Conditioners/N-5yc1vZc4lu?Ns=P_REP_PRC_MODE%7C0"
 
+// Torchieres
+var esTorchiere = "http://www.homedepot.com/b/Lighting-Ceiling-Fans-Lamps-Shades-Floor-Lamps/ENERGY-STAR-Certified/N-5yc1vZc7noZ1z0tlzw/Ntk-All/Ntt-torchiere?Ntx=mode%2Bmatchall&NCNI-5&Ns=P_REP_PRC_MODE%7C0";
+var baseTorchiere = "http://www.homedepot.com/b/Lighting-Ceiling-Fans-Lamps-Shades-Floor-Lamps/N-5yc1vZc7no/Ntk-All/Ntt-torchiere?Ns=P_REP_PRC_MODE%7C0&NCNI-5";
+
+// Windows
+var esWindows = "";
+var baseWindows = "";
 
 var efficientCSVString="";
 
@@ -44,6 +51,8 @@ var typeArr = [
 	{name: 'ENERGY STAR Dishwashers', es: esDW, base: baseDW},
 	{name: 'ENERGY STAR Dehumidifiers', es: esDH, base: baseDH},
 	{name: 'ENERGY STAR Room Air Conditioners', es: esRAC, base: baseRAC},
+	{name: 'ENERGY STAR Torchieres', es: esTorchiere, base: baseTorchiere},
+	{name: 'ENERGY STAR Windows', es: esWindows, base: baseWindows},
 ];
 
 
