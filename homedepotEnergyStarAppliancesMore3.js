@@ -51,8 +51,12 @@ var baseCeilingFans = "http://www.homedepot.com/b/Lighting-Ceiling-Fans-Ceiling-
 // Standard Electric Water Heater to Gas Water Heater
 var esGasWaterHeater = "http://www.homedepot.com/b/Plumbing-Water-Heaters-Residential-Gas/N-5yc1vZ25ecodZc1tz/Ntk-All/Ntt-gas%2Bwater%2Bheater?Ntx=mode+matchall&NCNI-5"
 var baseGasWaterHeater = "http://www.homedepot.com/b/Plumbing-Water-Heaters-Residential-Electric/N-5yc1vZ25ecodZ25ecodZc1u1/Ntk-All/Ntt-electric%2Bwater%2Bheater?Ntx=mode%20matchall&NCNI-5"
+// Standard Heat Pump Water Heater to Gas Water Heater
+var baseHeatPumpToGasWaterHeater = "http://www.homedepot.com/b/Residential-Electric/N-5yc1vZ25ecodZc1u1/Ntk-Extended/Ntt-heat%2Bpump%2Bwater%2Bheater?Ntx=mode+matchall&NCNI-5"
 
-
+// Ductless Mini-Split Heat Pumps
+var esDuctlessMiniSplitHeatPump = "http://www.homedepot.com/b/Heating-Venting-Cooling-Air-Conditioners-Coolers-Air-Conditioners-Ductless-Mini-Splits/ENERGY-STAR-Certified/N-5yc1vZc4m1Z1z0tlzw"
+var baseDuctlessMiniSplitHeatPump = "http://www.homedepot.com/b/Heating-Venting-Cooling-Air-Conditioners-Coolers-Air-Conditioners-Ductless-Mini-Splits/N-5yc1vZc4m1?Ns=P_REP_PRC_MODE%7C0"
 
 var efficientCSVString="";
 
@@ -65,6 +69,8 @@ var typeArr = [
 	{name: 'ENERGY STAR Windows', es: esWindows, base: baseWindows},
 	{name: 'Ceiling Fan with ENERGY STAR Light Fixture', es: esCeilingFans, base: baseCeilingFans},
 	{name: 'Standard Electric Water Heater to Gas Water Heater', es: esGasWaterHeater, base: baseGasWaterHeater},
+	{name: 'Standard Heat Pump Water Heater to Gas Water Heater', es: esGasWaterHeater, base: baseHeatPumpToGasWaterHeater},
+	{name: 'Ductless Mini-Split Heat Pumps', es: esDuctlessMiniSplitHeatPump, base: baseDuctlessMiniSplitHeatPump},
 ];
 
 
@@ -181,7 +187,7 @@ function scrapecurrentUrl(currentUrl, currentCategory, callback) {
 					seen[titleStr] = true;
 					if(currentUrl === currentTypeItem.es) esCsvString = esCsvString + newRowStr;
 					else if (currentUrl === currentTypeItem.base && esCsvString.indexOf(bulb.link) === -1) baseCsvString = baseCsvString + newRowStr;
-					else console.log("error: no url match")
+					//else //console.log("error: no url match")
 					//console.log(newRowStr)
 				}
 				//console.log(newRowStr);
