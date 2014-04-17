@@ -22,7 +22,7 @@ describe("urlArr", function(done){
 })
 
 describe("grabPage", function(done){
-	this.timeout(5000);
+	this.timeout(10000);
 	var urlArr;
 
 	beforeEach(function(done){
@@ -52,15 +52,16 @@ describe("grabPage", function(done){
 })
 
 describe("getProducts", function(done){
-	this.timeout(5000);
-	var bodyArr = []; // stores all of the jquery elements of all the pages we will be scraping
+	this.timeout(10000);
+	var bodyArr; // stores all of the jquery elements of all the pages we will be scraping
 	// bodyArr.length should be twice as long as the urlArr since each urlArr has an object with 2 urls
-	var urlArr = [];
+	var urlArr;
 	beforeEach(function(done){
 		console.log("made it here")
-		urlArr = m.defineUrls();
+		bodyArr = [];
+		//urlArr = m.defineUrls();
 		// loop through url arr and add each es and base url to the bodyArr
-		async.each(urlArr, function(urlObj, callback){
+		async.each(m.urls, function(urlObj, callback){
 			// lets get the baseUrl
 			m.grabPage(urlObj.baseUrl, function($){
 				// $.should.not.equal(undefined);
@@ -78,7 +79,7 @@ describe("getProducts", function(done){
 		}, function(err){
 			if(err) console.error("an error occured")
 			console.log("finished bulding bodyArr")
-			bodyArr.length.should.equal(urlArr.length*2)
+			bodyArr.length.should.equal(m.urls.length*2)
 			done();
 		})
 	})
@@ -86,13 +87,47 @@ describe("getProducts", function(done){
 	it("should return an array of all product elements on a page", function(done){
 		// We will first try with just one body element (why not the first?)
 		var bodyElm = bodyArr[0];
-		//console.log(bodyElm._root.children)
 		var productsElm = m.getProducts(bodyElm)
-		console.log("got element")
-		// productsElm.should.not.equal(undefined)
-		// productsElm.should.have.property("length")
 		productsElm.length.should.be.greaterThan(0)
-		//console.log(productsElm)
 		done();
 	})
+
+
+	it("getProductTitle should return the title string of a single product", function(done){
+		// We will first try with just one body element (why not the first?)
+		var bodyElm = bodyArr[0];
+
+		var productsElm = m.getProducts(bodyElm)
+		//Extract the title from the first element
+		var titleStr = m.getProductTitle(bodyElm, productsElm[0]);
+
+		titleStr.should.not.equal(undefined)
+		isString(titleStr).should.equal(true)
+		done();
+	})
+
+	it.only("getProductTitle should return the title string of all products", function(done){
+		// We will first try with just one body element (why not the first?)
+		var bodyElm = bodyArr[0];
+
+		var productsElm = m.getProducts(bodyElm)
+		var titleStr;
+		//Extract the title from the first element
+		_.each(productsElm, function(productElm){
+			titleStr = m.getProductTitle(bodyElm, productElm);
+			titleStr.should.not.equal(undefined)
+			isString(titleStr).should.equal(true)
+			console.log(titleStr)
+		})
+
+
+		console.log(m.selectors)
+		done();
+	})
+
 })
+
+function isString(anything){
+	if(typeof anything === "string") return true;
+	else return false;
+}
