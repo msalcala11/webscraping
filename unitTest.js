@@ -106,7 +106,7 @@ describe("getProducts", function(done){
 		done();
 	})
 
-	it.only("getProductTitle should return the title string of all products", function(done){
+	it("getProductTitle should return the title string of all products", function(done){
 		// We will first try with just one body element (why not the first?)
 		var bodyElm = bodyArr[0];
 
@@ -117,14 +117,131 @@ describe("getProducts", function(done){
 			titleStr = m.getProductTitle(bodyElm, productElm);
 			titleStr.should.not.equal(undefined)
 			isString(titleStr).should.equal(true)
-			console.log(titleStr)
 		})
 
-
-		console.log(m.selectors)
 		done();
 	})
 
+	it("getProductPrice should return the price string of a single product", function(done){
+		// We will first try with just one body element (why not the first?)
+		var bodyElm = bodyArr[0];
+
+		var productsElm = m.getProducts(bodyElm)
+		//Extract the title from the first element
+		var priceStr = m.getProductPrice(bodyElm, productsElm[0]);
+		//console.log(priceStr)
+		priceStr.should.not.equal(undefined)
+		isString(priceStr).should.equal(true)
+		priceStr.should.not.containEql("$")
+		done();
+	})
+
+	it("getProductPrice should return the price of all products", function(done){
+		// We will first try with just one body element (why not the first?)
+		var bodyElm = bodyArr[0];
+
+		var productsElm = m.getProducts(bodyElm)
+		var priceStr;
+		//Extract the title from the first element
+		_.each(productsElm, function(productElm){
+			priceStr = m.getProductPrice(bodyElm, productElm);
+			priceStr.should.not.equal(undefined)
+			isString(priceStr).should.equal(true)
+			priceStr.should.not.containEql("$")
+			console.log(priceStr)
+		})
+
+		done();
+	})
+
+	it("getProductLink should return the product detail link of a single product", function(done){
+		// We will first try with just one body element (why not the first?)
+		var bodyElm = bodyArr[0];
+
+		var productsElm = m.getProducts(bodyElm)
+		//Extract the title from the first element
+		var linkStr = m.getProductLink(bodyElm, productsElm[0]);
+
+		linkStr.should.not.equal(undefined)
+		isString(linkStr).should.equal(true)
+		//console.log(linkStr)
+		done();
+	})
+
+	it("getProductLink should return the product detail links of all products", function(done){
+		// We will first try with just one body element (why not the first?)
+		var bodyElm = bodyArr[0];
+
+		var productsElm = m.getProducts(bodyElm)
+		var linkStr;
+		//Extract the title from the first element
+		_.each(productsElm, function(productElm){
+			linkStr = m.getProductLink(bodyElm, productElm);
+			linkStr.should.not.equal(undefined)
+			isString(linkStr).should.equal(true)
+			//linkStr.should.not.containEql("$")
+			linkStr.should.not.equal("")
+			//console.log(linkStr)
+		})
+
+		done();
+	})
+
+	it("isEnergyStar should return true if a product is labeled as energy star", function(done){
+		// We will first try with just one body element (why not the first?)
+		var bodyElm = bodyArr[0];
+
+		var productsElm = m.getProducts(bodyElm)
+		var energyStarStr;
+		var num = 0;
+		_.each(productsElm, function(productElm){
+			energyStarStr = m.isEnergyStar(bodyElm, productElm);
+
+			energyStarStr.should.not.equal(undefined)
+			isString(energyStarStr).should.equal(false)
+			//console.log((num += 1) + ": " + energyStarStr + "; " + m.getProductTitle(bodyElm, productElm))
+		})
+		done();
+	})
+})
+
+describe("Csv string manipulation", function(done){
+	it("generate should output a string with commas and a new line character", function(done){
+		var output = m.generateNewCsvString();
+		output.should.containEql(",");
+		output.should.containEql("\n");
+		done()
+	})
+
+	it("add should add on to an existing csvString and another new line character", function(done){
+		var updatedCsvString = m.addCsvRow(m.generateNewCsvString(), "A category", "1000", "true", "A great TV", "http:baby")
+		updatedCsvString.should.containEql(m.generateNewCsvString())
+		updatedCsvString.should.containEql("A category")
+		done();
+	})
+})
+
+describe.only("Build Csv String", function(done){
+	this.timeout(10000);
+	it("should generate a new csv string", function(done){
+
+		m.buildCsvString(m.urls, function builtCsvString(masterCsvString){
+			masterCsvString.should.containEql(m.generateNewCsvString());
+			done();
+		});
+
+	})
+
+	it("should add a category for each item in the urlArr", function(done){{
+		m.buildCsvString(m.urls, function builtCsvString(masterCsvString){
+			_.each(m.urls, function(urlObj){
+				masterCsvString.should.containEql(urlObj.measure);
+			})
+			done();
+		});
+		
+		
+	}})
 })
 
 function isString(anything){
