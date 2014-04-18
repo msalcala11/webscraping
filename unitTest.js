@@ -219,9 +219,16 @@ describe("Csv string manipulation", function(done){
 		updatedCsvString.should.containEql("A category")
 		done();
 	})
+
+	it("add should not add on to an existing row if price is an empty string", function(done){
+		var updatedCsvString = m.addCsvRow(m.generateNewCsvString(), "A category", "", "true", "A great TV", "http:baby")
+		updatedCsvString.should.equal(m.generateNewCsvString())
+		//updatedCsvString.should.containEql("A category")
+		done();
+	})
 })
 
-describe.only("Build Csv String", function(done){
+describe("Build Csv String", function(done){
 	this.timeout(10000);
 	it("should generate a new csv string", function(done){
 
@@ -239,9 +246,29 @@ describe.only("Build Csv String", function(done){
 			})
 			done();
 		});
-		
-		
 	}})
+
+	it("should not have any blank cells", function(done){{
+		m.buildCsvString(m.urls, function builtCsvString(masterCsvString){
+			masterCsvString.should.not.containEql(",,")
+			masterCsvString.should.not.containEql(", ,")
+			done();
+		});
+	}})
+})
+
+describe("Write csv file", function(done){
+	it('should work', function(done){
+		m.writeCsvFile();
+		done()
+	})
+})
+
+describe.only("scrapeData", function(done){
+	this.timeout(10000000);
+	it('should work', function(done){
+		m.scrapeData(m.urls, done);
+	})
 })
 
 function isString(anything){

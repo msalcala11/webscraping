@@ -3,6 +3,7 @@ var cheerio = require("cheerio");
 var _ = require("underscore");
 var csv = require("csv");
 var async = require("async");
+var fs = require("fs");
 
 //An array of objects containing the measure name, the baseline url to scrape, and the efficient url to scrape
 var urls = [{
@@ -33,7 +34,9 @@ module.exports = {
 	isEnergyStar: isEnergyStar,
 	generateNewCsvString: generateNewCsvString,
 	addCsvRow: addCsvRow,
-	buildCsvString: buildCsvString
+	writeCsvFile: writeCsvFile,
+	buildCsvString: buildCsvString,
+	scrapeData: scrapeData
 }
 
 function defineSelectors() { 
@@ -104,8 +107,26 @@ function generateNewCsvString() {
 
 function addCsvRow(csvString, category, price, energyStar, name, source) {
 	// adds a new csv row to an existing csvString
-	var updatedCsvString = csvString + "'" + category + "," + price + "," + energyStar + "," + name + "," + source + '\n';
-	return updatedCsvString;
+	if(price === "") return csvString;
+	else {
+		var updatedCsvString = csvString + category + "," + price + "," + energyStar + "," + name.trim() + "," + source + "\n";
+		return updatedCsvString;		
+	}
+}
+
+function writeCsvFile(csvString, filename, cb){
+	console.log(csvString)
+	// csv()
+	// 	.from(csvString)
+	// 	.to('./' + filename)
+	// 	.on('end', function() {
+	//     	console.log('Wrote to ' + filename);
+	//     	cb();
+	//   	})
+	fs.writeFile(filename, csvString, function(err){
+		if(err) throw err;
+		cb()
+	})
 }
 
 function buildCsvString(urls, cb){
@@ -116,11 +137,46 @@ function buildCsvString(urls, cb){
 		grabPage(urlObj.baseUrl, function gotPage(baseBody){
 
 			var productsElm = getProducts(baseBody);
-			masterCsvString = addCsvRow(masterCsvString, urlObj.measure, getProductPrice(baseBody, productsElm[0]), isEnergyStar(baseBody, productsElm[0]), getProductTitle(baseBody, productsElm[0]), getProductLink(baseBody, productsElm[0]))
-			callback();
+			_.each(productsElm, function(productElm){
+				masterCsvString = addCsvRow(masterCsvString, 
+											urlObj.measure,
+											getProductPrice(baseBody, productElm), 
+											isEnergyStar(baseBody, productElm), 
+											getProductTitle(baseBody, productElm), 
+											getProductLink(baseBody, productElm)     
+											);
+			})
+
+			grabPage(urlObj.esUrl, function gotPage(esBody){
+
+				var productsElm = getProducts(esBody);
+				_.each(productsElm, function(productElm){
+					masterCsvString = addCsvRow(masterCsvString, 
+												urlObj.measure,
+												getProductPrice(esBody, productElm), 
+												isEnergyStar(esBody, productElm), 
+												getProductTitle(esBody, productElm), 
+												getProductLink(esBody, productElm)     
+												);
+				})
+				
+				callback();
+			})
+
 		})
 	}, function(err){
 		if(err) console.error(err)
+		//console.log(masterCsvString)
 		cb(masterCsvString);
+	})
+}
+
+function scrapeData(urls, cb){
+	buildCsvString(urls, function(masterCsvString){
+		
+		writeCsvFile(masterCsvString, "electronics.csv", function wroteCsvFile(){
+			console.log("all done!")
+			cb();
+		})
 	})
 }
