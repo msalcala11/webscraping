@@ -228,6 +228,36 @@ describe("Csv string manipulation", function(done){
 	})
 })
 
+describe("Iterate Through Search results", function(done){
+	this.timeout(100000);
+	var measureName, searchUrl, masterCsvString;
+
+	beforeEach(function(done){
+		measureName = "Energy Star TV";
+		searchUrl = "http://www.bestbuy.com/site/olstemplatemapper.jsp?id=pcat17071&type=page&st=categoryid%24abcat0101001&sc=Global&nrp=50&sp=%2Bcurrentprice+skuidsaas&qp=tvtype_facet%3DTV+Type~LED+Flat-Panel%5Etvscreensize_facet%3DTV+Screen+Size~28%22+-+32%22%5Etvscreensize_facet%3DTV+Screen+Size~33%22+-+39%22%5Etvscreensize_facet%3DTV+Screen+Size~40%22+-+45%22%5Etvscreensize_facet%3DTV+Screen+Size~46%22+-+49%22%5Etvscreensize_facet%3DTV+Screen+Size~50%22+-+54%22%5Etvscreensize_facet%3DTV+Screen+Size~55%22+-+59%22%5Etvscreensize_facet%3DTV+Screen+Size~60%22+-+64%22%5Etvscreensize_facet%3DTV+Screen+Size~65%22+and+Up%5Etvtype_facet%3DTV+Type~LCD+Flat-Panel%5Etvtype_facet%3DSAAS~TV+Type~Plasma+Flat-Panel&usc=All+Categories&fs=saas&browsedCategory=abcat0101001&seeAll=&gf=y&cp="
+		masterCsvString = m.generateNewCsvString();
+		done();
+	})
+	
+	it("should work", function(done){
+		m.iterateThroughSearchResults(measureName, searchUrl, masterCsvString, function(updatedCsvString){
+			done();
+		})
+	})
+
+	it("should return a csvString that has links containing cp=1 through cp=10", function(done){
+		m.iterateThroughSearchResults(measureName, searchUrl, masterCsvString, function(updatedCsvString){
+			updatedCsvString.should.not.equal(undefined)
+			for(var i=1; i<=10; i++){
+				updatedCsvString.should.containEql("cp=" + i)
+					
+			}
+			done();
+
+		})
+	})
+})
+
 describe("Build Csv String", function(done){
 	this.timeout(10000);
 	it("should generate a new csv string", function(done){
@@ -264,9 +294,9 @@ describe("Write csv file", function(done){
 	})
 })
 
-describe.only("scrapeData", function(done){
+describe("scrapeData", function(done){
 	this.timeout(10000000);
-	it('should work', function(done){
+	it.only('should work', function(done){
 		m.scrapeData(m.urls, done);
 	})
 })
