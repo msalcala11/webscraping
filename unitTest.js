@@ -187,21 +187,98 @@ describe("getProducts", function(done){
 		done();
 	})
 
+	it("getProductSku should return the product sku of all products", function(done){
+		// We will first try with just one body element (why not the first?)
+		var searchResultsPage = "http://www.bestbuy.com/site/olstemplatemapper.jsp?_dyncharset=UTF-8&_dynSessConf=8593576761124783874&id=pcat17071&type=page&ks=960&st=pcmcat143700050048_categoryid%24abcat0509000&sc=Global&cp=1&sp=%2Bcurrentprice+skuidsaas&qp=aspectratio_facet%3DAspect+Ratio~16%3A9%5Easpectratio_facet%3DAspect+Ratio~16%3A10%5Easpectratio_facet%3DAspect+Ratio~5%3A4%5Easpectratio_facet%3DAspect+Ratio~4%3A3%5Easpectratio_facet%3DAspect+Ratio~21%3A9%5Easpectratio_facet%3DAspect+Ratio~4%3A3+and+16%3A9%5Econdition_facet%3DCondition~New%5Emonitorfeatures_facet%3DSAAS~Monitor+Features~ENERGY+STAR+Certified&list=y&usc=All+Categories&nrp=50&fs=saas&iht=n&seeAll=%2CMaximum_Resolution&browsedCategory=pcmcat143700050048"
+		
+		m.grabPage(searchResultsPage, function($){
+			bodyElm = $;
+			var productsElm = m.getProducts(bodyElm)
+		
+			var skuStr;
+			skuStr = m.getProductSku(bodyElm, productsElm[0]);
+			
+	
+
+			_.each(productsElm, function(productElm){
+				skuStr = m.getProductSku(bodyElm, productElm);
+				skuStr.should.not.equal(undefined)
+				isString(skuStr).should.equal(true)
+				//linkStr.should.not.containEql("$")
+				skuStr.should.not.equal("")
+				console.log(skuStr)
+				//console.log(linkStr)
+			})
+			done();
+		})
+
+		//var bodyElm = bodyArr[0];
+
+		
+		// //Extract the title from the first element
+
+		//done();
+	})
+
+	// it("isEnergyStar should return true if a product is labeled as energy star", function(done){
+	// 	// We will first try with just one body element (why not the first?)
+	// 	var bodyElm = bodyArr[0];
+
+	// 	var productsElm = m.getProducts(bodyElm)
+	// 	var energyStarStr;
+	// 	var num = 0;
+	// 	_.each(productsElm, function(productElm){
+	// 		energyStarStr = m.isEnergyStar(bodyElm, productElm);
+
+	// 		energyStarStr.should.not.equal(undefined)
+	// 		isString(energyStarStr).should.equal(false)
+	// 		//console.log((num += 1) + ": " + energyStarStr + "; " + m.getProductTitle(bodyElm, productElm))
+	// 	})
+	// 	done();
+	// })
 	it("isEnergyStar should return true if a product is labeled as energy star", function(done){
 		// We will first try with just one body element (why not the first?)
 		var bodyElm = bodyArr[0];
+		var energyStarDetailPage = "http://www.bestbuy.com/site/15-6-lcd-monitor/2957194.p?id=1219084308986&skuId=2957194&st=pcmcat143700050048_categoryid$abcat0509000&cp=1&lp=1";
+		var energyStarDetailPage = "http://www.bestbuy.com/site/hanns-g-15-6-lcd-monitor/2957194.p;template=_specificationsTab"
+		
+		var templateUrl = "http://www.bestbuy.com/site/hanns-g-15-6-lcd-monitor/2957194.p;template=_specificationsTab"
 
-		var productsElm = m.getProducts(bodyElm)
-		var energyStarStr;
-		var num = 0;
-		_.each(productsElm, function(productElm){
-			energyStarStr = m.isEnergyStar(bodyElm, productElm);
+		//m.grabPage(energyStarDetailPage, sku, function(bodyElm){
+			m.isEnergyStar("2957194", function(energyStarBool){
+				energyStarBool.should.equal(true)
+				done();
+			})
+	})
 
-			energyStarStr.should.not.equal(undefined)
-			isString(energyStarStr).should.equal(false)
-			//console.log((num += 1) + ": " + energyStarStr + "; " + m.getProductTitle(bodyElm, productElm))
-		})
-		done();
+	it("isEnergyStar should return false if a product is labeled as not energy star", function(done){
+		// We will first try with just one body element (why not the first?)
+		//var bodyElm = bodyArr[0];
+		//var energyStarDetailPage = "http://www.bestbuy.com/site/15-6-lcd-monitor/2957194.p?id=1219084308986&skuId=2957194&st=pcmcat143700050048_categoryid$abcat0509000&cp=1&lp=1";
+		//var energyStarDetailPage = "http://www.bestbuy.com/site/hanns-g-15-6-lcd-monitor/2957194.p;template=_specificationsTab"
+		
+		//var templateUrl = "http://www.bestbuy.com/site/hanns-g-15-6-lcd-monitor/2957194.p;template=_specificationsTab"
+
+		//m.grabPage(energyStarDetailPage, sku, function(bodyElm){
+			m.isEnergyStar("2236029", function(energyStarBool){
+				energyStarBool.should.equal(false)
+				done();
+			})
+	})
+
+	it("isEnergyStar should return 'unknown' if a product is labeled as 'Unknown' energy star", function(done){
+		// We will first try with just one body element (why not the first?)
+		//var bodyElm = bodyArr[0];
+		//var energyStarDetailPage = "http://www.bestbuy.com/site/15-6-lcd-monitor/2957194.p?id=1219084308986&skuId=2957194&st=pcmcat143700050048_categoryid$abcat0509000&cp=1&lp=1";
+		//var energyStarDetailPage = "http://www.bestbuy.com/site/hanns-g-15-6-lcd-monitor/2957194.p;template=_specificationsTab"
+		
+		//var templateUrl = "http://www.bestbuy.com/site/hanns-g-15-6-lcd-monitor/2957194.p;template=_specificationsTab"
+
+		//m.grabPage(energyStarDetailPage, sku, function(bodyElm){
+			m.isEnergyStar("8914751", function(energyStarBool){
+				energyStarBool.should.equal("unknown")
+				done();
+			})
 	})
 })
 

@@ -38,6 +38,7 @@ var selectors = {
 	title: ".info-main h3 a", //assumes that you are running a find() on a single product element
 	price: ".info-side div h4 span",
 	link: ".info-main h3 a",
+	sku: ".sku",
 	energyStar: ".info-main div.description font"
 }
 
@@ -51,6 +52,7 @@ module.exports = {
 	getProductTitle: getProductTitle,
 	getProductPrice: getProductPrice,
 	getProductLink: getProductLink,
+	getProductSku: getProductSku,
 	isEnergyStar: isEnergyStar,
 	generateNewCsvString: generateNewCsvString,
 	addCsvRow: addCsvRow,
@@ -116,13 +118,46 @@ function getProductLink(bodyElm, productElm){
 	return "http://www.bestbuy.com" + productLinkStr;
 }
 
-function isEnergyStar(bodyElm, productElm) {
-	//searches dom to determine whether the product being examined is energy star or not
-	var energyStarStr = bodyElm(productElm).find(selectors.energyStar).text();
-	//return energyStarStr;
-	if(energyStarStr.indexOf("ENERGY STAR Certified") === -1) return false;
-	else return true;
+function getProductSku(bodyElm, productElm){
+	//console.log(selectors.link)
+	var productSkuStr = bodyElm(productElm).find(selectors.sku).text()
+	//console.log(productLinkStr)
+	return productSkuStr;
 }
+
+function isEnergyStar(sku, cb) {
+
+// template url format: (all we need is the sku) http://www.bestbuy.com/site/hanns-g-15-6-lcd-monitor/2957194.p;template=_specificationsTab
+	var templateUrl = "http://www.bestbuy.com/site/anythinggoeshere/" + sku + ".p;template=_specificationsTab";
+	grabPage(templateUrl, function($){
+		//console.log(bodyElm.html())
+		//var energyStarTableRowText = $("#full-specifications").html()
+		var energyStarTableRowText = $("tr:contains('ENERGY STAR Certified')").text()
+		//var energyStarTableRowText = $(".ui-tabs-panel").html();
+		if(energyStarTableRowText.indexOf("Yes") != -1) cb(true)
+		else if(energyStarTableRowText.indexOf("Unknown") != -1) cb("unknown")
+		else cb(false);
+		//console.log(energyStarTableRowText)
+		// fs.writeFile("htmlfile.txt", $.html(), function(err){
+		// 	if(err) throw err;
+		// 	cb()
+		// })
+		//cb();
+	})
+	//searches dom to determine whether the product being examined is energy star or not
+	//var energyStarStr = bodyElm(productElm).find(selectors.energyStar).text();
+	//return energyStarStr;
+	//if(energyStarStr.indexOf("ENERGY STAR Certified") === -1) return false;
+	//else return true;
+}
+
+// function isEnergyStar(bodyElm, productElm) {
+// 	//searches dom to determine whether the product being examined is energy star or not
+// 	var energyStarStr = bodyElm(productElm).find(selectors.energyStar).text();
+// 	//return energyStarStr;
+// 	if(energyStarStr.indexOf("ENERGY STAR Certified") === -1) return false;
+// 	else return true;
+// }
 
 function generateNewCsvString() {
 	// defines the header row of a new csv string
@@ -164,7 +199,7 @@ function iterateThroughSearchResults(measureName, searchURL, csvString, cb){
 
 	async.whilst(
 	    function () { return noMoreResults === false; },
-	    function (callback) {
+	    function (whilstCallback) {
 
 	    	// append the page number to the search url and get the jquery body
 	        grabPage(searchURL + pageNum, function gotPage(baseBody){
@@ -176,21 +211,42 @@ function iterateThroughSearchResults(measureName, searchURL, csvString, cb){
 				// If no results showed up on this page then we need to exit the loop
 				if(productsElm.length === 0) {
 					noMoreResults = true;
-					return callback();
+					return whilstCallback();
 				}
 
 				// If there are results on the page then we need to scrape them and add them to the csv string
-				_.each(productsElm, function(productElm){
-					csvString = addCsvRow(csvString, 
-												measureName,
-												getProductPrice(baseBody, productElm), 
-												isEnergyStar(baseBody, productElm), 
-												getProductTitle(baseBody, productElm), 
-												getProductLink(baseBody, productElm)     
-												);
-				})
-				pageNum++;
-				return callback()
+				// _.each(productsElm, function(productElm){
+				// 	csvString = addCsvRow(csvString, 
+				// 								measureName,
+				// 								getProductPrice(baseBody, productElm), 
+				// 								isEnergyStar(baseBody, productElm), 
+				// 								getProductTitle(baseBody, productElm), 
+				// 								getProductLink(baseBody, productElm)     
+				// 								);
+				// })
+
+	        	async.eachSeries(productsElm, function(productElm, callback){
+	        		
+		        		isEnergyStar(getProductSku(baseBody, productElm), function(energyStarBool){
+		        				// If the energy star status is labeled as unknown do not include record in csv file
+								if(energyStarBool === "unknown") return callback();
+								csvString = addCsvRow(csvString, 
+										measureName,
+										getProductPrice(baseBody, productElm), 
+										energyStarBool, 
+										getProductTitle(baseBody, productElm), 
+										getProductLink(baseBody, productElm)     
+									);
+								callback();
+		        		})
+
+
+	        		 },function(err){
+
+	        		 	pageNum++;
+						return whilstCallback()
+	        	})
+
 			})
 
 	    },

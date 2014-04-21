@@ -1,0 +1,104 @@
+<div id="full-specifications">
+<h2>Specifications</h2>
+<table>
+<thead>
+<tr>
+<th scope="col" class="spec-label-col">Specs:</th>
+<th scope="col" class="spec-value-col">Details:</th>
+<th scope="col">Description:</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th scope="row">Display Type</th>
+<td>LCD</td>
+<td>Technology used to display text and images on the screen. Computer monitors are available in 2 types: CRT (traditional tube displays) and LCD (flat-panel liquid crystal displays). Notebook computers, PDAs, mobile DVD players and other devices use LCD screens.</td>
+</tr>
+<tr>
+<th scope="row">Screen Size (Measured Diagonally)</th>
+<td>15.6"</td>
+<td>Size of the screen, in inches, measured diagonally from corner to corner.</td>
+</tr>
+<tr>
+<th scope="row">Maximum Resolution</th>
+<td>1366 x 768</td>
+<td>Maximum number of pixels a monitor is capable of displaying. The higher the resolution, the sharper the image.</td>
+</tr>
+<tr>
+<th scope="row">Native Resolution</th>
+<td>(1366 x 768)</td>
+<td></td>
+</tr>
+<tr>
+<th scope="row">Aspect Ratio</th>
+<td>16:9</td>
+<td>Describes the relationship between the width and the height of a display. Standard displays are 4:3, while widescreen displays are 16:9.</td>
+</tr>
+<tr>
+<th scope="row">Brightness</th>
+<td>200Nit</td>
+<td>Measurement of light output. The higher the brightness, the more visible the picture will be in rooms with a lot of light.</td>
+</tr>
+<tr>
+<th scope="row">Contrast Ratio</th>
+<td>500:1</td>
+<td>Difference between the brightest white and the darkest black a display can reproduce. The higher the contrast ratio, the better the color detail.</td>
+</tr>
+<tr>
+<th scope="row">Power Consumption</th>
+<td>10W</td>
+<td></td>
+</tr>
+<tr>
+<th scope="row">Speakers Included</th>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<th scope="row">Inputs</th>
+<td>VGA</td>
+<td>Jacks that accept incoming sound or video signals from other devices, such as car stereo systems, MP3 players and camcorders.</td>
+</tr>
+<tr>
+<th scope="row">VGA Input</th>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<th scope="row">DVI-D Input</th>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<th scope="row">HDMI Input</th>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<th scope="row">Tilt</th>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<th scope="row">ENERGY STAR Certified</th>
+<td>Yes</td>
+<td>ENERGY STAR is a joint program of the U.S. Environmental Protection Agency and the U.S. Department of Energy helping us all save money and protect the environment through energy efficient products and practices.</td>
+</tr>
+<tr>
+<th scope="row">Product Depth (without stand)</th>
+<td>5.9"</td>
+<td></td>
+</tr>
+<tr>
+<th scope="row">Green Compliance</th>
+<td>Energy Star</td>
+<td></td>
+</tr>
+<tr>
+<th scope="row">UPC</th>
+<td>887239005729</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
