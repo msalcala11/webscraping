@@ -6,7 +6,9 @@ var async = require("async");
 var fs = require("fs");
 
 //An array of objects containing the measure name, the baseline url to scrape, and the efficient url to scrape
-var urls = [{
+var urls = [
+			
+			{
 				measure: "ENERGY STAR Television",
 				//baseUrl: "http://www.bestbuy.com/site/olstemplatemapper.jsp?_dyncharset=UTF-8&_dynSessConf=5137597497672723997&id=pcat17071&type=page&ks=960&st=categoryid%24abcat0101001&sc=Global&cp=1&sp=%2Bcurrentprice+skuidsaas&qp=tvtype_facet%3DTV+Type~LED+Flat-Panel%5Etvscreensize_facet%3DTV+Screen+Size~28%22+-+32%22%5Etvscreensize_facet%3DTV+Screen+Size~33%22+-+39%22%5Etvscreensize_facet%3DTV+Screen+Size~40%22+-+45%22%5Etvscreensize_facet%3DTV+Screen+Size~46%22+-+49%22%5Etvscreensize_facet%3DTV+Screen+Size~50%22+-+54%22%5Etvscreensize_facet%3DTV+Screen+Size~55%22+-+59%22%5Etvscreensize_facet%3DTV+Screen+Size~60%22+-+64%22%5Etvscreensize_facet%3DTV+Screen+Size~65%22+and+Up%5Etvtype_facet%3DTV+Type~LCD+Flat-Panel%5Etvtype_facet%3DSAAS~TV+Type~Plasma+Flat-Panel&list=y&usc=All+Categories&nrp=50&fs=saas&iht=n&seeAll=&browsedCategory=abcat0101001",
 				baseUrl: "http://www.bestbuy.com/site/olstemplatemapper.jsp?id=pcat17071&type=page&st=categoryid%24abcat0101001&sc=Global&nrp=50&sp=%2Bcurrentprice+skuidsaas&qp=tvtype_facet%3DTV+Type~LED+Flat-Panel%5Etvscreensize_facet%3DTV+Screen+Size~28%22+-+32%22%5Etvscreensize_facet%3DTV+Screen+Size~33%22+-+39%22%5Etvscreensize_facet%3DTV+Screen+Size~40%22+-+45%22%5Etvscreensize_facet%3DTV+Screen+Size~46%22+-+49%22%5Etvscreensize_facet%3DTV+Screen+Size~50%22+-+54%22%5Etvscreensize_facet%3DTV+Screen+Size~55%22+-+59%22%5Etvscreensize_facet%3DTV+Screen+Size~60%22+-+64%22%5Etvscreensize_facet%3DTV+Screen+Size~65%22+and+Up%5Etvtype_facet%3DTV+Type~LCD+Flat-Panel%5Etvtype_facet%3DSAAS~TV+Type~Plasma+Flat-Panel&usc=All+Categories&fs=saas&browsedCategory=abcat0101001&seeAll=&gf=y&cp=",
@@ -14,23 +16,46 @@ var urls = [{
 						  // http://www.bestbuy.com/site/olstemplatemapper.jsp?id=pcat17071&type=page&st=categoryid%24abcat0101001&sc=Global&nrp=50&sp=%2Bcurrentprice+skuidsaas&qp=tvtype_facet%3DTV+Type~LED+Flat-Panel%5Etvscreensize_facet%3DTV+Screen+Size~28%22+-+32%22%5Etvscreensize_facet%3DTV+Screen+Size~33%22+-+39%22%5Etvscreensize_facet%3DTV+Screen+Size~40%22+-+45%22%5Etvscreensize_facet%3DTV+Screen+Size~46%22+-+49%22%5Etvscreensize_facet%3DTV+Screen+Size~50%22+-+54%22%5Etvscreensize_facet%3DTV+Screen+Size~55%22+-+59%22%5Etvscreensize_facet%3DTV+Screen+Size~60%22+-+64%22%5Etvscreensize_facet%3DTV+Screen+Size~65%22+and+Up%5Etvtype_facet%3DTV+Type~LCD+Flat-Panel%5Etvtype_facet%3DSAAS~TV+Type~Plasma+Flat-Panel&usc=All+Categories&fs=saas&browsedCategory=abcat0101001&seeAll=&gf=y&cp=1
 						  // http://www.bestbuy.com/site/olstemplatemapper.jsp?id=pcat17071&type=page&st=categoryid%24abcat0101001&sc=Global&nrp=50&sp=%2Bcurrentprice+skuidsaas&qp=tvtype_facet%3DTV+Type~LED+Flat-Panel%5Etvscreensize_facet%3DTV+Screen+Size~28%22+-+32%22%5Etvscreensize_facet%3DTV+Screen+Size~33%22+-+39%22%5Etvscreensize_facet%3DTV+Screen+Size~40%22+-+45%22%5Etvscreensize_facet%3DTV+Screen+Size~46%22+-+49%22%5Etvscreensize_facet%3DTV+Screen+Size~50%22+-+54%22%5Etvscreensize_facet%3DTV+Screen+Size~55%22+-+59%22%5Etvscreensize_facet%3DTV+Screen+Size~60%22+-+64%22%5Etvscreensize_facet%3DTV+Screen+Size~65%22+and+Up%5Etvtype_facet%3DTV+Type~LCD+Flat-Panel%5Etvtype_facet%3DSAAS~TV+Type~Plasma+Flat-Panel&usc=All+Categories&fs=saas&browsedCategory=abcat0101001&seeAll=&gf=y&cp=2
 						  // http://www.bestbuy.com/site/olstemplatemapper.jsp?id=pcat17071&type=page&st=categoryid%24abcat0101001&sc=Global&nrp=100&sp=%2Bcurrentprice+skuidsaas&qp=tvtype_facet%3DTV+Type~LED+Flat-Panel%5Etvscreensize_facet%3DTV+Screen+Size~28%22+-+32%22%5Etvscreensize_facet%3DTV+Screen+Size~33%22+-+39%22%5Etvscreensize_facet%3DTV+Screen+Size~40%22+-+45%22%5Etvscreensize_facet%3DTV+Screen+Size~46%22+-+49%22%5Etvscreensize_facet%3DTV+Screen+Size~50%22+-+54%22%5Etvscreensize_facet%3DTV+Screen+Size~55%22+-+59%22%5Etvscreensize_facet%3DTV+Screen+Size~60%22+-+64%22%5Etvscreensize_facet%3DTV+Screen+Size~65%22+and+Up%5Etvtype_facet%3DTV+Type~LCD+Flat-Panel%5Etvtype_facet%3DSAAS~TV+Type~Plasma+Flat-Panel&usc=All+Categories&fs=saas&browsedCategory=abcat0101001&seeAll=&gf=y&cp=3	
-				esUrl: "does not matter"//"http://www.bestbuy.com/site/olstemplatemapper.jsp?_dyncharset=UTF-8&_dynSessConf=5137597497672723997&id=pcat17071&type=page&ks=960&st=categoryid%24abcat0101001&sc=Global&cp=1&sp=%2Bcurrentprice+skuidsaas&qp=tvtype_facet%3DTV+Type~LED+Flat-Panel%5Etvscreensize_facet%3DTV+Screen+Size~28%22+-+32%22%5Etvscreensize_facet%3DTV+Screen+Size~33%22+-+39%22%5Etvscreensize_facet%3DTV+Screen+Size~40%22+-+45%22%5Etvscreensize_facet%3DTV+Screen+Size~46%22+-+49%22%5Etvscreensize_facet%3DTV+Screen+Size~50%22+-+54%22%5Etvscreensize_facet%3DTV+Screen+Size~55%22+-+59%22%5Etvscreensize_facet%3DTV+Screen+Size~60%22+-+64%22%5Etvscreensize_facet%3DTV+Screen+Size~65%22+and+Up%5Etvtype_facet%3DTV+Type~LCD+Flat-Panel%5Etvtype_facet%3DTV+Type~Plasma+Flat-Panel%5Etvfeatures_facet%3DSAAS~TV+Features~ENERGY+STAR+Certified&list=y&usc=All+Categories&nrp=50&fs=saas&iht=n&seeAll=&browsedCategory=abcat0101001"
+				//esUrl: "does not matter"//"http://www.bestbuy.com/site/olstemplatemapper.jsp?_dyncharset=UTF-8&_dynSessConf=5137597497672723997&id=pcat17071&type=page&ks=960&st=categoryid%24abcat0101001&sc=Global&cp=1&sp=%2Bcurrentprice+skuidsaas&qp=tvtype_facet%3DTV+Type~LED+Flat-Panel%5Etvscreensize_facet%3DTV+Screen+Size~28%22+-+32%22%5Etvscreensize_facet%3DTV+Screen+Size~33%22+-+39%22%5Etvscreensize_facet%3DTV+Screen+Size~40%22+-+45%22%5Etvscreensize_facet%3DTV+Screen+Size~46%22+-+49%22%5Etvscreensize_facet%3DTV+Screen+Size~50%22+-+54%22%5Etvscreensize_facet%3DTV+Screen+Size~55%22+-+59%22%5Etvscreensize_facet%3DTV+Screen+Size~60%22+-+64%22%5Etvscreensize_facet%3DTV+Screen+Size~65%22+and+Up%5Etvtype_facet%3DTV+Type~LCD+Flat-Panel%5Etvtype_facet%3DTV+Type~Plasma+Flat-Panel%5Etvfeatures_facet%3DSAAS~TV+Features~ENERGY+STAR+Certified&list=y&usc=All+Categories&nrp=50&fs=saas&iht=n&seeAll=&browsedCategory=abcat0101001"
 			},
 			{
 				measure: "ENERGY STAR Computer",
 				baseUrl: "http://www.bestbuy.com/site/olstemplatemapper.jsp?id=pcat17071&type=page&st=pcmcat138500050001_categoryid%24abcat0502000&sc=Global&nrp=50&sp=-bestsellingsort+skuidsaas&qp=SAAS~&usc=All+Categories&fs=saas&browsedCategory=pcmcat138500050001&seeAll=&gf=y&cp=",
-				esUrl: "does not matter"
+				//esUrl: "does not matter"
 			},
-			{
-				measure: "ENERGY STAR Computer",
-				baseUrl: "http://www.bestbuy.com/site/olstemplatemapper.jsp?id=pcat17071&type=page&st=pcmcat138500050001_categoryid%24abcat0502000&sc=Global&nrp=50&sp=-bestsellingsort+skuidsaas&qp=SAAS~&usc=All+Categories&fs=saas&browsedCategory=pcmcat138500050001&seeAll=&gf=y&cp=",
-				esUrl: "does not matter"
-			},
+
 			{
 				measure: "ENERGY STAR Monitor",
-				baseUrl: "http://www.bestbuy.com/site/olstemplatemapper.jsp?id=pcat17071&type=page&st=pcmcat143700050048_categoryid%24abcat0509000&sc=Global&nrp=50&sp=%2Bcurrentprice+skuidsaas&qp=aspectratio_facet%3DAspect+Ratio~16%3A9%5Easpectratio_facet%3DAspect+Ratio~16%3A10%5Easpectratio_facet%3DAspect+Ratio~5%3A4%5Easpectratio_facet%3DAspect+Ratio~4%3A3%5Easpectratio_facet%3DAspect+Ratio~21%3A9%5Easpectratio_facet%3DAspect+Ratio~4%3A3+and+16%3A9%5Econdition_facet%3DSAAS~Condition~New&usc=All+Categories&fs=saas&browsedCategory=pcmcat143700050048&seeAll=%2CMaximum_Resolution&gf=y&cp=1",
-				esUrl: "does not matter"
-			}]
+				baseUrl: "http://www.bestbuy.com/site/olstemplatemapper.jsp?id=pcat17071&type=page&st=pcmcat143700050048_categoryid%24abcat0509000&sc=Global&nrp=50&sp=%2Bcurrentprice+skuidsaas&qp=aspectratio_facet%3DAspect+Ratio~16%3A9%5Easpectratio_facet%3DAspect+Ratio~16%3A10%5Easpectratio_facet%3DAspect+Ratio~5%3A4%5Easpectratio_facet%3DAspect+Ratio~4%3A3%5Easpectratio_facet%3DAspect+Ratio~21%3A9%5Easpectratio_facet%3DAspect+Ratio~4%3A3+and+16%3A9%5Econdition_facet%3DSAAS~Condition~New&usc=All+Categories&fs=saas&browsedCategory=pcmcat143700050048&seeAll=%2CMaximum_Resolution&gf=y&cp=",
+				//esUrl: "does not matter"
+			},
+
+			{
+				measure: "ENERGY STAR Printer (InkJet)",
+				baseUrl: "http://www.bestbuy.com/site/olstemplatemapper.jsp?id=pcat17071&type=page&st=categoryid%24abcat0511002&sc=Global&nrp=50&sp=%2Bcurrentprice+skuidsaas&qp=condition_facet%3DCondition~New%5Ecurrentprice_facet%3DPrice~%2450+-+%2499.99%5Ecurrentprice_facet%3DPrice~%24100+-+%24149.99%5Ecurrentprice_facet%3DPrice~%24150+-+%24199.99%5Ecurrentprice_facet%3DPrice~%24200+-+%24249.99%5Ecurrentprice_facet%3DPrice~%24250+-+%24499.99%5Ecurrentprice_facet%3DPrice~%24500+-+%24749.99%5Ecurrentprice_facet%3DPrice~%24750+-+%24999.99%5Ecurrentprice_facet%3DPrice~%241000+-+%241249.99%5Ecurrentprice_facet%3DPrice~%241250+-+%241499.99%5Ecurrentprice_facet%3DPrice~%241500+-+%241999.99%5Ecurrentprice_facet%3DPrice~%242000+-+%242499.99%5Ecurrentprice_facet%3DPrice~%242500+-+%242999.99%5Ecurrentprice_facet%3DSAAS~Price~%243000+and+Up&usc=All+Categories&fs=saas&browsedCategory=abcat0511002&seeAll=%2CBrand&gf=y&cp=",
+				//esUrl: "does not matter"
+			},
+			{
+				measure: "ENERGY STAR Printer (LaserJet)",
+				baseUrl: "http://www.bestbuy.com/site/olstemplatemapper.jsp?id=pcat17071&type=page&st=categoryid%24abcat0511003&sc=Global&nrp=50&sp=%2Bcurrentprice+skuidsaas&qp=currentprice_facet%3DPrice~%2450+-+%2499.99%5Ecurrentprice_facet%3DPrice~%24100+-+%24149.99%5Ecurrentprice_facet%3DPrice~%24150+-+%24199.99%5Ecurrentprice_facet%3DPrice~%24200+-+%24249.99%5Ecurrentprice_facet%3DPrice~%24250+-+%24499.99%5Ecurrentprice_facet%3DPrice~%24500+-+%24749.99%5Ecurrentprice_facet%3DPrice~%24750+-+%24999.99%5Ecurrentprice_facet%3DPrice~%241000+-+%241249.99%5Ecurrentprice_facet%3DPrice~%241250+-+%241499.99%5Ecurrentprice_facet%3DPrice~%241500+-+%241999.99%5Ecurrentprice_facet%3DPrice~%242000+-+%242499.99%5Ecurrentprice_facet%3DPrice~%242500+-+%242999.99%5Ecurrentprice_facet%3DPrice~%243000+and+Up%5Econdition_facet%3DSAAS~Condition~New&usc=All+Categories&fs=saas&browsedCategory=abcat0511003&seeAll=&gf=y&cp=",
+				//esUrl: "does not matter"
+			},
+			{
+				measure: "ENERGY STAR Printer (All-In-One - InkJet)",
+				baseUrl: "http://www.bestbuy.com/site/olstemplatemapper.jsp?id=pcat17071&type=page&st=categoryid%24abcat0511004&sc=Global&nrp=50&sp=%2Bcurrentprice+skuidsaas&qp=condition_facet%3DSAAS~Condition~New&usc=All+Categories&fs=saas&browsedCategory=abcat0511004&seeAll=&gf=y&cp=",
+				//esUrl: "does not matter"
+			},
+			{
+				measure: "ENERGY STAR Printer (All-In-One - LaserJet)",
+				baseUrl: "http://www.bestbuy.com/site/olstemplatemapper.jsp?id=pcat17071&type=page&st=categoryid%24abcat0511005&sc=Global&nrp=15&sp=%2Bcurrentprice+skuidsaas&qp=condition_facet%3DSAAS~Condition~New&usc=All+Categories&fs=saas&browsedCategory=abcat0511005&seeAll=&gf=y&cp=",
+				//esUrl: "does not matter"
+			},
+			{
+				measure: "ENERGY STAR Fax Machine/Copier",
+				baseUrl: "http://www.bestbuy.com/site/olstemplatemapper.jsp?_dyncharset=UTF-8&_dynSessConf=-2989966466046614248&id=pcat17071&type=page&ks=960&st=categoryid%24abcat0511011&sc=Global&cp=1&sp=-bestsellingsort+skuidsaas&qp=brand_facet%3DBrand~Panasonic%5Ebrand_facet%3DBrand~Brother%5Ecurrentprice_facet%3DPrice~%2450+-+%2499.99%5Ecurrentprice_facet%3DPrice~%24100+-+%24149.99%5Ecurrentprice_facet%3DSAAS~Price~%24250+-+%24499.99&list=y&usc=All+Categories&nrp=15&fs=saas&iht=n&cp=11",
+				//esUrl: "does not matter"
+			},
+			]
 
 //An object of jquery selectors we will be using to find dom elements
 var selectors = {
@@ -39,7 +64,7 @@ var selectors = {
 	price: ".info-side div h4 span",
 	link: ".info-main h3 a",
 	sku: ".sku",
-	energyStar: ".info-main div.description font"
+	energyStar: ".info-main div.description font" // not always accurate so we don't use this anymore (we actually have to make a call to the detail page)
 }
 
 module.exports = {
@@ -71,11 +96,11 @@ function defineUrls(){
 }
 
 function grabPage(url, cb){
-	//console.log("grabbing page")
+
 	request({
 	  uri: url,
 	  headers: {
-        	'User-Agent': 'Mozilla/5.0'
+        	'User-Agent': 'Mozilla/5.0' // Imitate a browser so our request does not get blocked
     	}
 	}, function(error, response, body) {
 	  	var $ = cheerio.load(body);
@@ -112,16 +137,14 @@ function getProductPrice(bodyElm, productElm){
 }
 
 function getProductLink(bodyElm, productElm){
-	//console.log(selectors.link)
+
 	var productLinkStr = bodyElm(productElm).find(selectors.link).attr('href')
-	//console.log(productLinkStr)
 	return "http://www.bestbuy.com" + productLinkStr;
 }
 
 function getProductSku(bodyElm, productElm){
-	//console.log(selectors.link)
+	
 	var productSkuStr = bodyElm(productElm).find(selectors.sku).text()
-	//console.log(productLinkStr)
 	return productSkuStr;
 }
 
@@ -130,34 +153,14 @@ function isEnergyStar(sku, cb) {
 // template url format: (all we need is the sku) http://www.bestbuy.com/site/hanns-g-15-6-lcd-monitor/2957194.p;template=_specificationsTab
 	var templateUrl = "http://www.bestbuy.com/site/anythinggoeshere/" + sku + ".p;template=_specificationsTab";
 	grabPage(templateUrl, function($){
-		//console.log(bodyElm.html())
-		//var energyStarTableRowText = $("#full-specifications").html()
+
 		var energyStarTableRowText = $("tr:contains('ENERGY STAR Certified')").text()
-		//var energyStarTableRowText = $(".ui-tabs-panel").html();
+
 		if(energyStarTableRowText.indexOf("Yes") != -1) cb(true)
 		else if(energyStarTableRowText.indexOf("Unknown") != -1) cb("unknown")
 		else cb(false);
-		//console.log(energyStarTableRowText)
-		// fs.writeFile("htmlfile.txt", $.html(), function(err){
-		// 	if(err) throw err;
-		// 	cb()
-		// })
-		//cb();
 	})
-	//searches dom to determine whether the product being examined is energy star or not
-	//var energyStarStr = bodyElm(productElm).find(selectors.energyStar).text();
-	//return energyStarStr;
-	//if(energyStarStr.indexOf("ENERGY STAR Certified") === -1) return false;
-	//else return true;
 }
-
-// function isEnergyStar(bodyElm, productElm) {
-// 	//searches dom to determine whether the product being examined is energy star or not
-// 	var energyStarStr = bodyElm(productElm).find(selectors.energyStar).text();
-// 	//return energyStarStr;
-// 	if(energyStarStr.indexOf("ENERGY STAR Certified") === -1) return false;
-// 	else return true;
-// }
 
 function generateNewCsvString() {
 	// defines the header row of a new csv string
@@ -175,14 +178,6 @@ function addCsvRow(csvString, category, price, energyStar, name, source) {
 }
 
 function writeCsvFile(csvString, filename, cb){
-	//console.log(csvString)
-	// csv()
-	// 	.from(csvString)
-	// 	.to('./' + filename)
-	// 	.on('end', function() {
-	//     	console.log('Wrote to ' + filename);
-	//     	cb();
-	//   	})
 	fs.writeFile(filename, csvString, function(err){
 		if(err) throw err;
 		cb()
@@ -208,25 +203,18 @@ function iterateThroughSearchResults(measureName, searchURL, csvString, cb){
 				console.log("measure: " + measureName)
 				console.log("pageNum: " + pageNum)
 
-				// If no results showed up on this page then we need to exit the loop
-				if(productsElm.length === 0) {
+				console.log("Num of products on page: " + productsElm.length)
+
+				// If no results showed up on this page (or if we are on fax machines and we have already gotten them) then we need to exit the loop
+				if(productsElm.length === 0 || (measureName === "ENERGY STAR Fax Machine/Copier" && pageNum === 2) ) {
 					noMoreResults = true;
 					return whilstCallback();
 				}
 
-				// If there are results on the page then we need to scrape them and add them to the csv string
-				// _.each(productsElm, function(productElm){
-				// 	csvString = addCsvRow(csvString, 
-				// 								measureName,
-				// 								getProductPrice(baseBody, productElm), 
-				// 								isEnergyStar(baseBody, productElm), 
-				// 								getProductTitle(baseBody, productElm), 
-				// 								getProductLink(baseBody, productElm)     
-				// 								);
-				// })
-
+	        	// Iterate through each product shown on the page
 	        	async.eachSeries(productsElm, function(productElm, callback){
-	        		
+	        			
+	        			// Make a call to the product detail page to determine whether it is energy star or not
 		        		isEnergyStar(getProductSku(baseBody, productElm), function(energyStarBool){
 		        				// If the energy star status is labeled as unknown do not include record in csv file
 								if(energyStarBool === "unknown") return callback();
@@ -263,69 +251,30 @@ function buildCsvString(urls, cb){
 	async.eachSeries(urls, function(urlObj, callback){
 
 		//while base url with index returns a non-zero length productsElm array keep grabbing a new page 
-
 		iterateThroughSearchResults(urlObj.measure, urlObj.baseUrl, masterCsvString, function(updatedCsvString){
 			masterCsvString = updatedCsvString;
 			callback();
 		})
 	}, function(err){
 		if(err) console.error(err)
-		//console.log(masterCsvString)
+
 		cb(masterCsvString);
 	})
 }
 
-
-// function buildCsvString(urls, cb){
-// 	var masterCsvString = generateNewCsvString();
-
-// 	async.each(urls, function(urlObj, callback){
-
-// 		//while base url with index returns a non-zero length productsElm array keep grabbing a new page 
-
-// 		grabPage(urlObj.baseUrl, function gotPage(baseBody){
-
-// 			var productsElm = getProducts(baseBody);
-// 			_.each(productsElm, function(productElm){
-// 				masterCsvString = addCsvRow(masterCsvString, 
-// 											urlObj.measure,
-// 											getProductPrice(baseBody, productElm), 
-// 											isEnergyStar(baseBody, productElm), 
-// 											getProductTitle(baseBody, productElm), 
-// 											getProductLink(baseBody, productElm)     
-// 											);
-// 			})
-
-// 			grabPage(urlObj.esUrl, function gotPage(esBody){
-
-// 				var productsElm = getProducts(esBody);
-// 				_.each(productsElm, function(productElm){
-// 					masterCsvString = addCsvRow(masterCsvString, 
-// 												urlObj.measure,
-// 												getProductPrice(esBody, productElm), 
-// 												isEnergyStar(esBody, productElm), 
-// 												getProductTitle(esBody, productElm), 
-// 												getProductLink(esBody, productElm)     
-// 												);
-// 				})
-				
-// 				callback();
-// 			})
-
-// 		})
-// 	}, function(err){
-// 		if(err) console.error(err)
-// 		//console.log(masterCsvString)
-// 		cb(masterCsvString);
-// 	})
-// }
-
+// And heres the tiny little function that uses all the previous ones to do big things
 function scrapeData(urls, cb){
 	buildCsvString(urls, function(masterCsvString){
 		
 		writeCsvFile(masterCsvString, "electronics.csv", function wroteCsvFile(){
-			console.log("all done!")
+			console.log("Wrote to electronics.csv")
 			cb();
 		})
 	})
 }
+
+//"node module.js" will call the following function and execute the scraping algorithm
+
+scrapeData(urls, function(){
+	console.log("All done!")
+})

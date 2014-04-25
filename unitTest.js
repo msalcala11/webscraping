@@ -14,7 +14,7 @@ describe("urlArr", function(done){
 		urlArr.length.should.not.equal(0);
 		_.each(urlArr, function(item){
 			item.measure.should.not.equal(undefined)
-			item.esUrl.should.not.equal(undefined)
+			//item.esUrl.should.not.equal(undefined)
 			item.baseUrl.should.not.equal(undefined)
 		})
 		done();
@@ -364,12 +364,12 @@ describe("Build Csv String", function(done){
 	}})
 })
 
-describe("Write csv file", function(done){
-	it('should work', function(done){
-		m.writeCsvFile();
-		done()
-	})
-})
+// describe("Write csv file", function(done){
+// 	it('should work', function(done){
+// 		m.writeCsvFile();
+// 		done()
+// 	})
+// })
 
 describe("scrapeData", function(done){
 	this.timeout(10000000);
